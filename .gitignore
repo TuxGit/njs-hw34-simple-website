@@ -22,6 +22,9 @@ data/db.json
 # config
 etc/config.json
 
-###
-.task
+# temp data
 tmp
+public/upload
+
+# task/issue description
+.task
