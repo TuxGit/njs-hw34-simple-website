@@ -19,6 +19,9 @@ jspm_packages/
 # local database
 data/db.json
 
+# config
+etc/config.json
+
 ###
 .task
 tmp
