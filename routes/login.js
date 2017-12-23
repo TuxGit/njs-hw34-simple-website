@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-// const path = require('path');
-const lowdb = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-
-const adapter = new FileSync(('data/db.json'));
-const db = lowdb(adapter);
+// const lowdb = require('lowdb');
+// const FileSync = require('lowdb/adapters/FileSync');
+// const adapter = new FileSync(('data/db.json'));
+// const db = lowdb(adapter);
+const db = require('../data/index');
 
 const isAnon = (req, res, next) => {
   // проверяем, является ли пользователь гостём (требуется ли показывать форму входа)
-  if (!req.session.login) {
+  // if (!req.session.login) {
+  if (!req.session.user || !req.session.user.login) {
     return next();
   }
   // если нет, то перебросить пользователя на главную страницу сайта
@@ -24,7 +24,7 @@ const isAnon = (req, res, next) => {
 // route /login
 router.route('/')
   .get(isAnon, function (req, res, next) {
-    res.render('pages/login', { isAdmin: req.session.isAdmin });
+    res.render('pages/login', { user: req.session.user }); // isAdmin: req.session.user && req.session.user.isAdmin
   })
   .post(function (req, res, next) {
     const user = db.get('users')
@@ -39,8 +39,11 @@ router.route('/')
       });
     } else {
       // обновляем сессию
-      req.session.isAdmin = user.isAdmin;
-      req.session.login = user.login;
+      // req.session.login = user.login;
+      req.session.user = {
+        isAdmin: user.is_admin,
+        login: user.login
+      };
       // отправляем ответ
       res.json({
         mes: 'Aвторизация успешна!',

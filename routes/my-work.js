@@ -23,12 +23,7 @@ const upload = multer({
   })
 });
 
-// const path = require('path');
-const lowdb = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-
-const adapter = new FileSync(('data/db.json'));
-const db = lowdb(adapter);
+const db = require('../data/index');
 
 // route /my-work
 router.route('/')
@@ -36,7 +31,7 @@ router.route('/')
     const projects = db.get('projects').value();
 
     res.render('pages/my-work', {
-      user: req.session, // todo - use object req.session.user
+      user: req.session.user,
       projects: projects
     });
   })
@@ -50,7 +45,8 @@ router.route('/')
       .trim().isLength({ min: 1 })
   ], function (req, res, next) {
     // проверяем разрешение на создание
-    if (!req.session.isAdmin) {
+    // if (!req.session.isAdmin) {
+    if (!req.session.user || !req.session.user.isAdmin) {
       return res.status(403).json({
         mes: 'Доступ запрещён',
         status: 'Error'

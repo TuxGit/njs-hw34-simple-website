@@ -14,7 +14,7 @@ const filter = require('express-validator/filter');
 // route /contact-me
 router.route('/')
   .get(function (req, res, next) {
-    res.render('pages/contact-me', { isAdmin: req.session.login });
+    res.render('pages/contact-me', { user: req.session.user });
   })
   .post([
     // check.check('name').exists(),

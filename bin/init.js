@@ -1,12 +1,12 @@
 const fs = require('fs');
-
 const path = require('path');
+
 const lowdb = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
 // #1
 // заполнение БД значениями по умолчанию
-const adapter = new FileSync(path.join(__dirname, 'db.json'));
+const adapter = new FileSync(path.join(__dirname, '..', 'data', 'db.json'));
 const db = lowdb(adapter);
 
 const defaultData = {

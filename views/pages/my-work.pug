@@ -23,7 +23,7 @@ block content
 							.project-desc #{item.description}
 
 					//- Добавить проект
-					if user.isAdmin
+					if user && user.isAdmin
 						li.projects-item.add-new-item
 							a.add-new-link#add-new-item(href="#")
 								.add-new-text Добавить проект

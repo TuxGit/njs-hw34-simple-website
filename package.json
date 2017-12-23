@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "dev": "set DEBUG=simple-website:* & npm start",
     "nodemon": "nodemon bin/www",
-    "postinstall": "node ./data/init"
+    "postinstall": "node ./bin/init"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

@@ -1,7 +1,10 @@
 footer.page-footer
   .container
     .lock
-      a.lock-inner(href="/login") Войти
+      if user && user.login
+        a.lock-inner(href="/logout") Выйти (#{user.login})
+      else
+        a.lock-inner(href="/login") Войти
     .copyright © 2015, Это сайт Гомера, пожалуйста, не копируйте и не воруйте его
 
 

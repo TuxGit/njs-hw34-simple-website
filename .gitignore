@@ -24,7 +24,8 @@ etc/config.json
 
 # temp data
 tmp
-public/upload
+public/upload/*
+!public/upload/.gitkeep
 
 # task/issue description
 .task
