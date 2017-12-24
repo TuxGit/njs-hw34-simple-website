@@ -7,14 +7,29 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const session = require('koa-session');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
+const loginRouter = require('./routes/login');
 
 // error handler
 onerror(app);
 
 // middlewares
+app.keys = ['some secret hurr dasdas'];
+app.use(session({
+  key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
+  /** (number || 'session') maxAge in ms (default is 1 days) */
+  /** 'session' will result in a cookie that expires when session/browser is closed */
+  /** Warning: If a session cookie is stolen, this cookie will never expire */
+  maxAge: 86400000,
+  overwrite: true, /** (boolean) can overwrite or not (default true) */
+  httpOnly: true, /** (boolean) httpOnly or not (default true) */
+  signed: true, /** (boolean) signed or not (default true) */
+  rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. default is false **/
+}, app));
+
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
 }));
@@ -37,6 +52,7 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
+app.use(loginRouter.routes(), loginRouter.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
