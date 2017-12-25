@@ -28,7 +28,7 @@ router.route('/')
   })
   .post(function (req, res, next) {
     const user = db.get('users')
-      .find({ login: 'admin' })
+      .find({ login: req.body.login })
       .value();
 
     if (!user || user.password !== req.body.password) {
