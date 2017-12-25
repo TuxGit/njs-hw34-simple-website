@@ -5,14 +5,13 @@ const app = new Koa();
 const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
-const bodyparser = require('koa-bodyparser');
+const bodyparser = require('koa-bodyparser'); // todo - заменить на koa-body!
 const logger = require('koa-logger');
 
 const session = require('koa-session');
 const validate = require('koa-validate');
 
 const index = require('./routes/index');
-const users = require('./routes/users');
 const loginRouter = require('./routes/login');
 const contactMeRouter = require('./routes/contact-me');
 const myWorkRouter = require('./routes/my-work');
@@ -23,7 +22,7 @@ onerror(app);
 // middlewares
 app.keys = ['some secret hurr dasdas'];
 app.use(session({
-  key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
+  key: 'mysession', /** (string) cookie key (default is koa:sess) */
   /** (number || 'session') maxAge in ms (default is 1 days) */
   /** 'session' will result in a cookie that expires when session/browser is closed */
   /** Warning: If a session cookie is stolen, this cookie will never expire */
@@ -58,7 +57,6 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
 app.use(loginRouter.routes(), loginRouter.allowedMethods());
 app.use(contactMeRouter.routes(), contactMeRouter.allowedMethods());
 app.use(myWorkRouter.routes(), myWorkRouter.allowedMethods());

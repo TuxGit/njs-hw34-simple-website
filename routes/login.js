@@ -2,18 +2,29 @@ const router = require('koa-router')();
 
 const db = require('../data/index');
 
-// todo - if logged redirect to home page /
+router.get('/logout', async (ctx, next) => {
+  ctx.session = null;
+  ctx.redirect('/');
+});
+
+// router.prefix('/login');
+// router.get('/', async (ctx, next) => { ... });
+
 router.get('/login', async (ctx, next) => {
-  await ctx.render('pages/login', {
-    // title: 'Hello Koa 2!',
-    user: ctx.session.user
-  });
+  if (!ctx.session.user || !ctx.session.user.login) {
+    await ctx.render('pages/login', {
+      // title: 'Hello Koa 2!',
+      user: ctx.session.user
+    });
+  } else {
+    ctx.redirect('/');
+  }
 });
 
 router.post('/login', async (ctx, next) => {
   // ctx.req.body => undefined!
   const user = db.get('users')
-    .find({ login: ctx.request.body.login }) // todo!!! - Исправить в express версии bug!!!
+    .find({ login: ctx.request.body.login })
     .value();
 
   if (!user || user.password !== ctx.request.body.password) {
