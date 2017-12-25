@@ -7,11 +7,14 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+
 const session = require('koa-session');
+const validate = require('koa-validate');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
 const loginRouter = require('./routes/login');
+const contactMeRouter = require('./routes/contact-me');
 
 // error handler
 onerror(app);
@@ -29,6 +32,9 @@ app.use(session({
   signed: true, /** (boolean) signed or not (default true) */
   rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. default is false **/
 }, app));
+
+// bind validate module
+validate(app);
 
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
@@ -53,6 +59,7 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 app.use(loginRouter.routes(), loginRouter.allowedMethods());
+app.use(contactMeRouter.routes(), contactMeRouter.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
